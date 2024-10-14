@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const BookList = () => {
     const [books, setBooks] = useState([]);
@@ -109,6 +110,12 @@ const BookList = () => {
                             >
                                 {wishlist.find((item) => item.id === book.id) ? '❤️' : '🤍'}
                             </button>
+                            <Link
+                                to={`/book/${book.id}`}
+                                className="mt-auto bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition"
+                            >
+                                View Details
+                            </Link>
                         </div>
                     ))}
                 </div>

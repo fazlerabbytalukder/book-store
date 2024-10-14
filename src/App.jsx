@@ -1,5 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
+import BookDetails from './components/BookDetails';
 import BookList from './components/BoookList';
 import Navbar from './components/Navbar';
 import Wishlist from './components/Wishlist';
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<BookList />} />
         <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/book/:id" element={<BookDetails />} />
       </Routes>
     </Router>
   )
