@@ -6,9 +6,9 @@ import LoadingBooks from './LoadingBooks';
 const BookList = () => {
     const [books, setBooks] = useState([]);
     const [filteredBooks, setFilteredBooks] = useState([]);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState(localStorage.getItem('searchQuery') || '');
+    const [genre, setGenre] = useState(localStorage.getItem('genre') || '');
     const [wishlist, setWishlist] = useState(() => JSON.parse(localStorage.getItem('wishlist')) || []);
-    const [genre, setGenre] = useState('');
     const [nextPage, setNextPage] = useState(null);
     const [prevPage, setPrevPage] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -18,6 +18,12 @@ const BookList = () => {
         const apiUrl = import.meta.env.VITE_API_URL;
         fetchBooks(apiUrl);
     }, []);
+
+    useEffect(() => {
+        if (books.length > 0) {
+            applyFilters();
+        }
+    }, [books, searchQuery, genre]);
 
     const fetchBooks = async (url) => {
         setLoading(true);
@@ -35,25 +41,36 @@ const BookList = () => {
         setLoading(false);
     };
 
-    const handleSearch = (e) => {
-        setSearchQuery(e.target.value);
+    const applyFilters = () => {
+        let filtered = books;
 
-        const filtered = books.filter((book) =>
-            book.title.toLowerCase().includes(e.target.value.toLowerCase())
-        );
+        if (searchQuery) {
+            filtered = filtered.filter((book) =>
+                book.title.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        }
+
+        if (genre) {
+            filtered = filtered.filter((book) =>
+                book.subjects.some((subject) => subject.toLowerCase().includes(genre.toLowerCase()))
+            );
+        }
+
         setFilteredBooks(filtered);
         setNoBooksFound(filtered.length === 0);
     };
 
-    const handleGenreChange = (e) => {
-        setGenre(e.target.value);
+    const handleSearch = (e) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+        localStorage.setItem('searchQuery', query);
+        applyFilters();
+    };
 
-        const filtered = books.filter((book) =>
-            (e.target.value === '' || book.subjects.some((subject) => subject.toLowerCase().includes(e.target.value.toLowerCase()))) &&
-            book.title.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-        setFilteredBooks(filtered);
-        setNoBooksFound(filtered.length === 0);
+    const handleGenreChange = (e) => {
+        const selectedGenre = e.target.value;
+        setGenre(selectedGenre);
+        localStorage.setItem('genre', selectedGenre);
     };
 
     const handlePagination = (url) => {
@@ -68,7 +85,7 @@ const BookList = () => {
             updatedWishlist.push(book);
         }
         setWishlist(updatedWishlist);
-        localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
+        localStorage.setItem('wishlist', JSON.stringify(updatedWishlist)); // Save wishlist to localStorage
     };
 
     const truncateTitle = (title, wordLimit) => {
