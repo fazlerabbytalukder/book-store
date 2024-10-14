@@ -22,7 +22,7 @@ const BookList = () => {
             const response = await axios.get(url);
             const { results, next, previous } = response.data;
             setBooks(results);
-            setFilteredBooks(results); // Initialize filtered books to all books
+            setFilteredBooks(results);
             setNextPage(next);
             setPrevPage(previous);
             setNoBooksFound(results.length === 0);
@@ -35,7 +35,6 @@ const BookList = () => {
     const handleSearch = (e) => {
         setSearchQuery(e.target.value);
 
-        // Filter books based on title
         const filtered = books.filter((book) =>
             book.title.toLowerCase().includes(e.target.value.toLowerCase())
         );
@@ -46,7 +45,6 @@ const BookList = () => {
     const handleGenreChange = (e) => {
         setGenre(e.target.value);
 
-        // Filter books by genre (if applicable) and search term (if any)
         const filtered = books.filter((book) =>
             (e.target.value === '' || book.subjects.some((subject) => subject.toLowerCase().includes(e.target.value.toLowerCase()))) &&
             book.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -88,7 +86,6 @@ const BookList = () => {
                     <option value="fiction">Fiction</option>
                     <option value="science fiction">Science Fiction</option>
                     <option value="horror">Horror</option>
-                    {/* Add more genre options as needed */}
                 </select>
             </div>
 
