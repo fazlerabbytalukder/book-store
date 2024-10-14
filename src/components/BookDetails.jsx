@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 const BookDetails = () => {
-    const { id } = useParams(); // Get the book ID from the URL
+    const { id } = useParams();
     const [book, setBook] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -11,7 +11,7 @@ const BookDetails = () => {
         const fetchBookDetails = async () => {
             try {
                 const response = await axios.get(`https://gutendex.com/books/?ids=${id}`);
-                setBook(response.data.results[0]); // API returns an array, pick the first result
+                setBook(response.data.results[0]);
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching book details:", error);
