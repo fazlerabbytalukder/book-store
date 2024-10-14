@@ -11,7 +11,8 @@ const BookDetails = () => {
     useEffect(() => {
         const fetchBookDetails = async () => {
             try {
-                const response = await axios.get(`https://gutendex.com/books/?ids=${id}`);
+                const apiUrl = import.meta.env.VITE_API_URL;
+                const response = await axios.get(`${apiUrl}/?ids=${id}`);
                 setBook(response.data.results[0]);
                 setLoading(false);
             } catch (error) {
@@ -35,7 +36,7 @@ const BookDetails = () => {
         <div className="container mx-auto p-6">
             <div className="flex flex-col md:flex-row gap-5">
                 <div className='w-full md:w-[30%]'>
-                    <img src={book.formats['image/jpeg']} alt={book.title} className="w-full h-auto" />
+                    <img src={book.formats['image/jpeg']} alt={book.title} className="w-full h-auto rounded-md" />
                 </div>
                 <div className='w-full md:w-[70%]'>
                     <div className='text-left'>

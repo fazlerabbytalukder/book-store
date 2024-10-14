@@ -15,7 +15,8 @@ const BookList = () => {
     const [noBooksFound, setNoBooksFound] = useState(false);
 
     useEffect(() => {
-        fetchBooks(`https://gutendex.com/books`);
+        const apiUrl = import.meta.env.VITE_API_URL;
+        fetchBooks(apiUrl);
     }, []);
 
     const fetchBooks = async (url) => {
